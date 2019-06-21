@@ -7,6 +7,7 @@ syntax Int ::= hash(Int) [function, smtlib(hash)]
 // functions
 syntax Cmd ::= stateTransition(Block)
              | processSlots(Int)
+             | processSlot()
              | processBlock(Block)
              | processEpoch()
 
@@ -61,7 +62,7 @@ configuration <T>
         <attestations> .Attestations </attestations>
       </block>
     </blocks>
-    <lastBlock> 0 </lastBlock>
+    <eBlocks> .Map </eBlocks> // Slot -> Latest Block
   </state>
   <stateHistory> .List </stateHistory>
 </T>
@@ -87,6 +88,11 @@ rule <k> init => . ... </k>
      )
        ...
      </blocks>
+     <eBlocks>
+       .Map
+     =>
+       0 |-> 0
+     </eBlocks>
 
 // state_transition
 rule <k> stateTransition(Block)
@@ -95,7 +101,8 @@ rule <k> stateTransition(Block)
      <slot> Slot </slot>
      requires Slot <Int Block.slot
 
-rule <k> (. => processEpoch())
+rule <k> (. => processSlot()
+            ~> processEpoch())
       ~> processSlots(TargetSlot) ... </k>
      <slot> Slot => Slot +Int 1 </slot>
      requires Slot <Int TargetSlot
@@ -103,6 +110,10 @@ rule <k> (. => processEpoch())
 rule <k> processSlots(TargetSlot) => . ... </k>
      <slot> Slot </slot>
      requires Slot ==Int TargetSlot
+
+rule <k> processSlot() => . ... </k>
+     <slot> Slot </slot>
+     <eBlocks> M => M[Slot <- M[Slot -Int 1]] </eBlocks>
 
 // TODO:
 rule <k> processBlock(#Block(Slot,Parent,Attestations))
@@ -120,7 +131,8 @@ rule <k> processBlock(#Block(Slot,Parent,Attestations))
      )
        ...
      </blocks>
-     <lastBlock> Parent => Slot </lastBlock>
+     <eBlocks> M => M[Slot <- Slot] </eBlocks>
+     requires M[Slot -Int 1] ==K Parent
 
 syntax KItem ::= processAttestations(Attestations)
 rule <k> processAttestations(A As => As) ... </k>
