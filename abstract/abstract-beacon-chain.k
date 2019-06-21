@@ -16,9 +16,23 @@ rule C:Cmd Cs:Cmds => C ~> Cs
 
 // data structures
 syntax Block ::= #Block(Int,Int,Attestations) // slot, parent, attestations
+syntax Int          ::= Block ".slot"         [function]
+syntax Int          ::= Block ".parent"       [function]
+syntax Attestations ::= Block ".attestations" [function]
+rule #Block(X,_,_).slot         => X
+rule #Block(_,X,_).parent       => X
+rule #Block(_,_,X).attestations => X
 
 syntax Attestations ::= List{Attestation,""}
 syntax Attestation  ::= #Attestation(Int,Int,Int,Int) // source epoch/block, target epoch/block
+syntax Int ::= Attestation ".source_epoch" [function]
+syntax Int ::= Attestation ".source_block" [function]
+syntax Int ::= Attestation ".target_epoch" [function]
+syntax Int ::= Attestation ".target_block" [function]
+rule #Attestation(X,_,_,_).source_epoch => X
+rule #Attestation(_,X,_,_).source_block => X
+rule #Attestation(_,_,X,_).target_epoch => X
+rule #Attestation(_,_,_,X).target_block => X
 
 // macros
 syntax Int ::= "SLOTS_PER_EPOCH"  rule SLOTS_PER_EPOCH => 64 [macro]
@@ -56,6 +70,11 @@ syntax KItem ::= "TODO"
 
 syntax KItem ::= "init"
 rule <k> init => . ... </k>
+     <attested>
+       .Map
+     =>
+       0 |-> .Attestations
+     </attested>
      <blocks>
      (
        .Bag
@@ -70,11 +89,11 @@ rule <k> init => . ... </k>
      </blocks>
 
 // state_transition
-rule <k> stateTransition(#Block(NewBlockSlot,Parent,Attestations))
-      => processSlots(NewBlockSlot)
-      ~> processBlock(#Block(NewBlockSlot,Parent,Attestations)) ... </k>
+rule <k> stateTransition(Block)
+      => processSlots(Block.slot)
+      ~> processBlock(Block) ... </k>
      <slot> Slot </slot>
-     requires Slot <Int NewBlockSlot
+     requires Slot <Int Block.slot
 
 rule <k> (. => processEpoch())
       ~> processSlots(TargetSlot) ... </k>
@@ -86,7 +105,8 @@ rule <k> processSlots(TargetSlot) => . ... </k>
      requires Slot ==Int TargetSlot
 
 // TODO:
-rule <k> processBlock(#Block(Slot,Parent,Attestations)) => . ... </k>
+rule <k> processBlock(#Block(Slot,Parent,Attestations))
+      => processAttestations(Attestations) ... </k>
      <slot> Slot </slot>
      <blocks>
      (
@@ -101,6 +121,14 @@ rule <k> processBlock(#Block(Slot,Parent,Attestations)) => . ... </k>
        ...
      </blocks>
      <lastBlock> Parent => Slot </lastBlock>
+
+syntax KItem ::= processAttestations(Attestations)
+rule <k> processAttestations(A As => As) ... </k>
+     <attested>
+       A.target_epoch |-> (Atts:Attestations => A Atts)
+       ...
+     </attested>
+rule processAttestations(.Attestations) => .
 
 rule <k> processEpoch() => TODO ... </k>
      <slot> Slot </slot>

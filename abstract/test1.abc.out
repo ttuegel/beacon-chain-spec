@@ -10,7 +10,7 @@
       .Map
     </validators>
     <attested>
-      .Map
+      0 |-> #Attestation ( -1 , -2 , 0 , 1 )  .Attestations
     </attested>
     <justified>
       .Map
@@ -42,7 +42,7 @@
           0
         </parent>
         <attestations>
-          .Attestations
+          #Attestation ( -1 , -2 , 0 , 1 )  .Attestations
         </attestations>
       </block>
       <bSlot>
