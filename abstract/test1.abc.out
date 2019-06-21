@@ -31,6 +31,9 @@
         <attestations>
           .Attestations
         </attestations>
+        <bID>
+          0
+        </bID>
       </block>
       <bSlot>
         1
@@ -44,6 +47,9 @@
         <attestations>
           #Attestation ( -1 , -2 , 0 , 1 )  .Attestations
         </attestations>
+        <bID>
+          10001
+        </bID>
       </block>
       <bSlot>
         3
@@ -57,6 +63,9 @@
         <attestations>
           .Attestations
         </attestations>
+        <bID>
+          10003
+        </bID>
       </block>
     </blocks>
     <eBlocks>

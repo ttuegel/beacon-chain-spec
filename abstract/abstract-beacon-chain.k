@@ -16,13 +16,15 @@ syntax Cmds ::= Cmd Cmds | Cmd
 rule C:Cmd Cs:Cmds => C ~> Cs
 
 // data structures
-syntax Block ::= #Block(Int,Int,Attestations) // slot, parent, attestations
+syntax Block ::= #Block(Int,Int,Int,Attestations) // id, slot, parent, attestations
+syntax Int          ::= Block ".id"           [function]
 syntax Int          ::= Block ".slot"         [function]
 syntax Int          ::= Block ".parent"       [function]
 syntax Attestations ::= Block ".attestations" [function]
-rule #Block(X,_,_).slot         => X
-rule #Block(_,X,_).parent       => X
-rule #Block(_,_,X).attestations => X
+rule #Block(X,_,_,_).id           => X
+rule #Block(_,X,_,_).slot         => X
+rule #Block(_,_,X,_).parent       => X
+rule #Block(_,_,_,X).attestations => X
 
 syntax Attestations ::= List{Attestation,""}
 syntax Attestation  ::= #Attestation(Int,Int,Int,Int) // source epoch/block, target epoch/block
@@ -60,6 +62,7 @@ configuration <T>
         <bSlot> 0 </bSlot>
         <parent> 0 </parent>
         <attestations> .Attestations </attestations>
+        <bID> 0 </bID>
       </block>
     </blocks>
     <eBlocks> .Map </eBlocks> // Slot -> Latest Block
@@ -84,6 +87,7 @@ rule <k> init => . ... </k>
          <bSlot> 0 </bSlot>
          <parent> -1 </parent>
          <attestations> .Attestations </attestations>
+         <bID> 0 </bID>
        </block>
      )
        ...
@@ -116,7 +120,7 @@ rule <k> processSlot() => . ... </k>
      <eBlocks> M => M[Slot <- M[Slot -Int 1]] </eBlocks>
 
 // TODO:
-rule <k> processBlock(#Block(Slot,Parent,Attestations))
+rule <k> processBlock(#Block(ID,Slot,Parent,Attestations))
       => processAttestations(Attestations) ... </k>
      <slot> Slot </slot>
      <blocks>
@@ -127,6 +131,7 @@ rule <k> processBlock(#Block(Slot,Parent,Attestations))
          <bSlot> Slot </bSlot>
          <parent> Parent </parent>
          <attestations> Attestations </attestations>
+         <bID> ID </bID>
        </block>
      )
        ...
