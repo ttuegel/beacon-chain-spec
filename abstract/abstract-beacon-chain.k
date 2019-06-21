@@ -130,12 +130,38 @@ rule <k> processAttestations(A As => As) ... </k>
       andBool A.source_block ==Int JBlock
 rule processAttestations(.Attestations) => .
 
-rule <k> processEpoch() => TODO ... </k>
+rule <k> processEpoch() => justify((Slot /Int SLOTS_PER_EPOCH) -Int 1) ... </k>
      <currentSlot> Slot </currentSlot>
      requires Slot %Int SLOTS_PER_EPOCH ==Int 0 // Slot is the first slot of an epoch
 
 rule <k> processEpoch() => . ... </k>
      <currentSlot> Slot </currentSlot>
      requires Slot %Int SLOTS_PER_EPOCH =/=Int 0
+
+syntax KItem ::= justify(Int)
+rule <k> justify(Epoch)
+      => collectVotes(Epoch *Int SLOTS_PER_EPOCH, As, .Attestations)
+         ... </k>
+     <currentSlot> Slot </currentSlot>
+     <state>
+       <slot> Slot </slot>
+       <attested>
+         Epoch |-> As:Attestations
+         ...
+       </attested>
+       ...
+     </state>
+
+syntax KItem ::= collectVotes(Int, Attestations, Attestations)
+rule <k> collectVotes(EpochSlot, A Attestations, As)
+      => collectVotes(EpochSlot,   Attestations, #if A.target_block ==Int EpochBoundaryBlockID
+                                                 #then A As
+                                                 #else   As
+                                                 #fi) ... </k>
+     <state>
+       <slot> EpochSlot </slot>
+       <lastBlock> (_,EpochBoundaryBlockID) </lastBlock>
+       ...
+     </state>
 
 endmodule
