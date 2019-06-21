@@ -50,109 +50,128 @@ imports MAP
 
 configuration <T>
   <k> init ~> $PGM:Cmds </k>
-  // a state of slot N is the post-state of a block at slot N
-  <state>
-    <slot> 0 </slot>
-    <validators> .Map </validators> // ValidatorID -> ValidatorState
-    <attested> .Map </attested> // Epoch -> Attestations
-    <justified> .Map </justified> // Epoch -> Block
-    <finalized> .Map </finalized> // Epoch -> Block
-    <blocks> // blockchain
-      <block multiplicity="*" type="Map">
-        <bSlot> 0 </bSlot>
-        <parent> 0 </parent>
-        <attestations> .Attestations </attestations>
-        <bID> 0 </bID>
-      </block>
-    </blocks>
-    <eBlocks> .Map </eBlocks> // Slot -> Latest Block
-  </state>
-  <stateHistory> .List </stateHistory>
+  <currentSlot> 0 </currentSlot>
+  <states>
+    // a state of slot N is the post-state of a (possibly empty) block at slot N
+    <state multiplicity="*" type="Map">
+      <slot> 0 </slot>
+      <validators> .Map </validators> // ValidatorID -> ValidatorState
+      <attested> .Map </attested> // Epoch -> Attestations
+      <justified> .Map </justified> // Epoch -> Block
+      <finalized> .Map </finalized> // Epoch -> Block
+      <blocks> // blockchain
+        <block multiplicity="*" type="Map">
+          <bSlot> 0 </bSlot>
+          <parent> 0 </parent> // parent block id
+          <attestations> .Attestations </attestations>
+          <bID> 0 </bID> // unique block id (e.g., hash)
+        </block>
+      </blocks>
+      <lastBlock> 0 </lastBlock> // last block id
+    </state>
+  </states>
 </T>
 
 syntax KItem ::= "TODO"
 
 syntax KItem ::= "init"
 rule <k> init => . ... </k>
-     <attested>
-       .Map
-     =>
-       0 |-> .Attestations
-     </attested>
-     <blocks>
-     (
-       .Bag
-     =>
-       <block>
-         <bSlot> 0 </bSlot>
-         <parent> -1 </parent>
-         <attestations> .Attestations </attestations>
-         <bID> 0 </bID>
-       </block>
-     )
-       ...
-     </blocks>
-     <eBlocks>
-       .Map
-     =>
-       0 |-> 0
-     </eBlocks>
+     <currentSlot> 0 </currentSlot>
+     <states> .Bag =>
+       <state>
+         <slot> 0 </slot>
+         <validators> .Map </validators>
+         <attested> 0 |-> .Attestations </attested>
+         <justified> .Map </justified>
+         <finalized> .Map </finalized>
+         <blocks>
+           <block>
+             <bSlot> 0 </bSlot>
+             <parent> -1 </parent>
+             <attestations> .Attestations </attestations>
+             <bID> 0 </bID>
+           </block>
+         </blocks>
+         <lastBlock> 0 </lastBlock>
+       </state>
+     </states>
 
 // state_transition
 rule <k> stateTransition(Block)
       => processSlots(Block.slot)
       ~> processBlock(Block) ... </k>
-     <slot> Slot </slot>
+     <currentSlot> Slot </currentSlot>
      requires Slot <Int Block.slot
 
 rule <k> (. => processSlot()
             ~> processEpoch())
       ~> processSlots(TargetSlot) ... </k>
-     <slot> Slot => Slot +Int 1 </slot>
+     <currentSlot> Slot => Slot +Int 1 </currentSlot>
+     <states>
+       <state>
+         <slot> Slot </slot>
+         S
+       </state>
+     (
+       .Bag
+     =>
+       <state>
+         <slot> Slot +Int 1 </slot>
+         S
+       </state>
+     )
+       ...
+     </states>
      requires Slot <Int TargetSlot
 
 rule <k> processSlots(TargetSlot) => . ... </k>
-     <slot> Slot </slot>
+     <currentSlot> Slot </currentSlot>
      requires Slot ==Int TargetSlot
 
 rule <k> processSlot() => . ... </k>
-     <slot> Slot </slot>
-     <eBlocks> M => M[Slot <- M[Slot -Int 1]] </eBlocks>
 
 // TODO:
 rule <k> processBlock(#Block(ID,Slot,Parent,Attestations))
       => processAttestations(Attestations) ... </k>
-     <slot> Slot </slot>
-     <blocks>
-     (
-       .Bag
-     =>
-       <block>
-         <bSlot> Slot </bSlot>
-         <parent> Parent </parent>
-         <attestations> Attestations </attestations>
-         <bID> ID </bID>
-       </block>
-     )
+     <currentSlot> Slot </currentSlot>
+     <state>
+       <slot> Slot </slot>
+       <blocks>
+       (
+         .Bag
+       =>
+         <block>
+           <bSlot> Slot </bSlot>
+           <parent> Parent </parent>
+           <attestations> Attestations </attestations>
+           <bID> ID </bID>
+         </block>
+       )
+         ...
+       </blocks>
+       <lastBlock> Parent => ID </lastBlock>
        ...
-     </blocks>
-     <eBlocks> M => M[Slot <- Slot] </eBlocks>
-     requires M[Slot -Int 1] ==K Parent
+     </state>
 
 syntax KItem ::= processAttestations(Attestations)
 rule <k> processAttestations(A As => As) ... </k>
-     <attested>
-       A.target_epoch |-> (Atts:Attestations => A Atts)
+     <currentSlot> Slot </currentSlot>
+     <state>
+       <slot> Slot </slot>
+       <attested>
+         A.target_epoch |-> (Atts:Attestations => A Atts)
+         ...
+       </attested>
        ...
-     </attested>
+     </state>
 rule processAttestations(.Attestations) => .
 
 rule <k> processEpoch() => TODO ... </k>
-     <slot> Slot </slot>
+     <currentSlot> Slot </currentSlot>
      requires Slot %Int SLOTS_PER_EPOCH ==Int 0 // Slot is the first slot of an epoch
 
 rule <k> processEpoch() => . ... </k>
-     <slot> Slot </slot>
+     <currentSlot> Slot </currentSlot>
      requires Slot %Int SLOTS_PER_EPOCH =/=Int 0
 
 endmodule
