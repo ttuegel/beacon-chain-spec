@@ -31,20 +31,26 @@
           <bSlot>
             0
           </bSlot>
+          <bID>
+            0
+          </bID>
           <parent>
-            -1
+            ( -1 , -1 )
           </parent>
           <attestations>
             .Attestations
           </attestations>
-          <bID>
-            0
-          </bID>
         </block>
       </blocks>
       <lastBlock>
-        0
+        ( 0 , 0 )
       </lastBlock>
+      <lastJustified>
+        ( 0 , 0 )
+      </lastJustified>
+      <lastFinalized>
+        ( 0 , 0 )
+      </lastFinalized>
     </state>
     <slot>
       1
@@ -56,7 +62,7 @@
         .Map
       </validators>
       <attested>
-        0 |-> #Attestation ( -1 , -2 , 0 , 1 )  .Attestations
+        0 |-> #Attestation ( ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
       </attested>
       <justified>
         .Map
@@ -71,15 +77,15 @@
           <bSlot>
             0
           </bSlot>
+          <bID>
+            0
+          </bID>
           <parent>
-            -1
+            ( -1 , -1 )
           </parent>
           <attestations>
             .Attestations
           </attestations>
-          <bID>
-            0
-          </bID>
         </block>
         <bSlot>
           1
@@ -87,20 +93,26 @@
           <bSlot>
             1
           </bSlot>
-          <parent>
-            0
-          </parent>
-          <attestations>
-            #Attestation ( -1 , -2 , 0 , 1 )  .Attestations
-          </attestations>
           <bID>
             10001
           </bID>
+          <parent>
+            ( 0 , 0 )
+          </parent>
+          <attestations>
+            #Attestation ( ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+          </attestations>
         </block>
       </blocks>
       <lastBlock>
-        10001
+        ( 1 , 10001 )
       </lastBlock>
+      <lastJustified>
+        ( 0 , 0 )
+      </lastJustified>
+      <lastFinalized>
+        ( 0 , 0 )
+      </lastFinalized>
     </state>
     <slot>
       2
@@ -112,7 +124,7 @@
         .Map
       </validators>
       <attested>
-        0 |-> #Attestation ( -1 , -2 , 0 , 1 )  .Attestations
+        0 |-> #Attestation ( ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
       </attested>
       <justified>
         .Map
@@ -127,15 +139,15 @@
           <bSlot>
             0
           </bSlot>
+          <bID>
+            0
+          </bID>
           <parent>
-            -1
+            ( -1 , -1 )
           </parent>
           <attestations>
             .Attestations
           </attestations>
-          <bID>
-            0
-          </bID>
         </block>
         <bSlot>
           1
@@ -143,20 +155,26 @@
           <bSlot>
             1
           </bSlot>
-          <parent>
-            0
-          </parent>
-          <attestations>
-            #Attestation ( -1 , -2 , 0 , 1 )  .Attestations
-          </attestations>
           <bID>
             10001
           </bID>
+          <parent>
+            ( 0 , 0 )
+          </parent>
+          <attestations>
+            #Attestation ( ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+          </attestations>
         </block>
       </blocks>
       <lastBlock>
-        10001
+        ( 1 , 10001 )
       </lastBlock>
+      <lastJustified>
+        ( 0 , 0 )
+      </lastJustified>
+      <lastFinalized>
+        ( 0 , 0 )
+      </lastFinalized>
     </state>
     <slot>
       3
@@ -168,7 +186,7 @@
         .Map
       </validators>
       <attested>
-        0 |-> #Attestation ( -1 , -2 , 0 , 1 )  .Attestations
+        0 |-> #Attestation ( ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
       </attested>
       <justified>
         .Map
@@ -183,15 +201,15 @@
           <bSlot>
             0
           </bSlot>
+          <bID>
+            0
+          </bID>
           <parent>
-            -1
+            ( -1 , -1 )
           </parent>
           <attestations>
             .Attestations
           </attestations>
-          <bID>
-            0
-          </bID>
         </block>
         <bSlot>
           1
@@ -199,15 +217,15 @@
           <bSlot>
             1
           </bSlot>
-          <parent>
-            0
-          </parent>
-          <attestations>
-            #Attestation ( -1 , -2 , 0 , 1 )  .Attestations
-          </attestations>
           <bID>
             10001
           </bID>
+          <parent>
+            ( 0 , 0 )
+          </parent>
+          <attestations>
+            #Attestation ( ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+          </attestations>
         </block>
         <bSlot>
           3
@@ -215,20 +233,26 @@
           <bSlot>
             3
           </bSlot>
+          <bID>
+            10003
+          </bID>
           <parent>
-            10001
+            ( 1 , 10001 )
           </parent>
           <attestations>
             .Attestations
           </attestations>
-          <bID>
-            10003
-          </bID>
         </block>
       </blocks>
       <lastBlock>
-        10003
+        ( 3 , 10003 )
       </lastBlock>
+      <lastJustified>
+        ( 0 , 0 )
+      </lastJustified>
+      <lastFinalized>
+        ( 0 , 0 )
+      </lastFinalized>
     </state>
     <slot>
       4
@@ -240,7 +264,7 @@
         .Map
       </validators>
       <attested>
-        0 |-> #Attestation ( -1 , -2 , 0 , 1 )  .Attestations
+        0 |-> #Attestation ( ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
       </attested>
       <justified>
         .Map
@@ -255,15 +279,15 @@
           <bSlot>
             0
           </bSlot>
+          <bID>
+            0
+          </bID>
           <parent>
-            -1
+            ( -1 , -1 )
           </parent>
           <attestations>
             .Attestations
           </attestations>
-          <bID>
-            0
-          </bID>
         </block>
         <bSlot>
           1
@@ -271,15 +295,15 @@
           <bSlot>
             1
           </bSlot>
-          <parent>
-            0
-          </parent>
-          <attestations>
-            #Attestation ( -1 , -2 , 0 , 1 )  .Attestations
-          </attestations>
           <bID>
             10001
           </bID>
+          <parent>
+            ( 0 , 0 )
+          </parent>
+          <attestations>
+            #Attestation ( ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+          </attestations>
         </block>
         <bSlot>
           3
@@ -287,20 +311,26 @@
           <bSlot>
             3
           </bSlot>
+          <bID>
+            10003
+          </bID>
           <parent>
-            10001
+            ( 1 , 10001 )
           </parent>
           <attestations>
             .Attestations
           </attestations>
-          <bID>
-            10003
-          </bID>
         </block>
       </blocks>
       <lastBlock>
-        10003
+        ( 3 , 10003 )
       </lastBlock>
+      <lastJustified>
+        ( 0 , 0 )
+      </lastJustified>
+      <lastFinalized>
+        ( 0 , 0 )
+      </lastFinalized>
     </state>
   </states>
 </T>

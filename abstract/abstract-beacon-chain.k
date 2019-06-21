@@ -17,15 +17,18 @@ configuration <T>
       <attested> .Map </attested> // Epoch -> Attestations
       <justified> .Map </justified> // Epoch -> Block
       <finalized> .Map </finalized> // Epoch -> Block
-      <blocks> // blockchain
+      // blockchain
+      <blocks>
         <block multiplicity="*" type="Map">
-          <bSlot> 0 </bSlot>
-          <parent> 0 </parent> // parent block id
+          <bSlot> 0 </bSlot> <bID> 0 </bID> // unique block id (e.g., hash)
+          <parent> (0,0) </parent> // parent block id
           <attestations> .Attestations </attestations>
-          <bID> 0 </bID> // unique block id (e.g., hash)
         </block>
       </blocks>
-      <lastBlock> 0 </lastBlock> // last block id
+      // derived info
+      <lastBlock> (0,0) </lastBlock> // last block (slot, id)
+      <lastJustified> (0,0) </lastJustified> // last justified (epoch, block id)
+      <lastFinalized> (0,0) </lastFinalized> // last finalized (epoch, block id)
     </state>
   </states>
 </T>
@@ -44,13 +47,14 @@ rule <k> init => . ... </k>
          <finalized> .Map </finalized>
          <blocks>
            <block>
-             <bSlot> 0 </bSlot>
-             <parent> -1 </parent>
+             <bSlot> 0 </bSlot> <bID> 0 </bID>
+             <parent> (-1,-1) </parent>
              <attestations> .Attestations </attestations>
-             <bID> 0 </bID>
            </block>
          </blocks>
-         <lastBlock> 0 </lastBlock>
+         <lastBlock> (0,0) </lastBlock>
+         <lastJustified> (0,0) </lastJustified>
+         <lastFinalized> (0,0) </lastFinalized>
        </state>
      </states>
 
@@ -89,7 +93,7 @@ rule <k> processSlots(TargetSlot) => . ... </k>
 rule <k> processSlot() => . ... </k>
 
 // TODO:
-rule <k> processBlock(#Block(ID,Slot,Parent,Attestations))
+rule <k> processBlock(#Block((Slot,ID),Parent,Attestations))
       => processAttestations(Attestations) ... </k>
      <currentSlot> Slot </currentSlot>
      <state>
@@ -99,15 +103,14 @@ rule <k> processBlock(#Block(ID,Slot,Parent,Attestations))
          .Bag
        =>
          <block>
-           <bSlot> Slot </bSlot>
+           <bSlot> Slot </bSlot> <bID> ID </bID>
            <parent> Parent </parent>
            <attestations> Attestations </attestations>
-           <bID> ID </bID>
          </block>
        )
          ...
        </blocks>
-       <lastBlock> Parent => ID </lastBlock>
+       <lastBlock> Parent => (Slot,ID) </lastBlock>
        ...
      </state>
 
@@ -120,8 +123,11 @@ rule <k> processAttestations(A As => As) ... </k>
          A.target_epoch |-> (Atts:Attestations => A Atts)
          ...
        </attested>
+       <lastJustified> (JEpoch,JBlock) </lastJustified>
        ...
      </state>
+     requires A.source_epoch ==Int JEpoch
+      andBool A.source_block ==Int JBlock
 rule processAttestations(.Attestations) => .
 
 rule <k> processEpoch() => TODO ... </k>
