@@ -25,10 +25,10 @@
         0 |-> .Attestations
       </attested>
       <justified>
-        0 |-> 0
+        0 |-> some 0
       </justified>
       <finalized>
-        .Map
+        0 |-> some 0
       </finalized>
       <blocks>
         <bSlot>
@@ -77,10 +77,10 @@
         0 |-> #Attestation ( 0 , 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
       </attested>
       <justified>
-        0 |-> 0
+        0 |-> some 0
       </justified>
       <finalized>
-        .Map
+        0 |-> some 0
       </finalized>
       <blocks>
         <bSlot>
@@ -145,10 +145,10 @@
         0 |-> #Attestation ( 0 , 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
       </attested>
       <justified>
-        0 |-> 0
+        0 |-> some 0
       </justified>
       <finalized>
-        .Map
+        0 |-> some 0
       </finalized>
       <blocks>
         <bSlot>
@@ -213,10 +213,10 @@
         0 |-> #Attestation ( 0 , 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
       </attested>
       <justified>
-        0 |-> 0
+        0 |-> some 0
       </justified>
       <finalized>
-        .Map
+        0 |-> some 0
       </finalized>
       <blocks>
         <bSlot>
@@ -298,10 +298,12 @@
         1 |-> .Attestations
       </attested>
       <justified>
-        0 |-> 0
+        0 |-> some 0
+        1 |-> none
       </justified>
       <finalized>
-        .Map
+        0 |-> some 0
+        1 |-> none
       </finalized>
       <blocks>
         <bSlot>

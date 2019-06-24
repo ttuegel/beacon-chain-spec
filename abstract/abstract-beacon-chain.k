@@ -15,8 +15,8 @@ configuration <T>
       <slot> 0 </slot>
       <validators> .Map </validators> // ValidatorID -> ValidatorState
       <attested> .Map </attested> // Epoch -> Attestations
-      <justified> .Map </justified> // Epoch -> Block
-      <finalized> .Map </finalized> // Epoch -> Block
+      <justified> .Map </justified> // Epoch -> Block option
+      <finalized> .Map </finalized> // Epoch -> Block option
       // blockchain
       <blocks>
         <block multiplicity="*" type="Map">
@@ -51,8 +51,8 @@ rule <k> init => . ... </k>
            90006 |-> #Validator(90006,1)
          </validators>
          <attested> 0 |-> .Attestations </attested>
-         <justified> 0 |-> 0 </justified>
-         <finalized> .Map </finalized>
+         <justified> 0 |-> some 0 </justified>
+         <finalized> 0 |-> some 0 </finalized>
          <blocks>
            <block>
              <bSlot> 0 </bSlot> <bID> 0 </bID>
@@ -152,6 +152,8 @@ rule <k> processEpoch()
      <state>
        <slot> Slot </slot>
        <attested> A => A[epochOf(Slot) <- .Attestations] </attested>
+       <justified> J => J[epochOf(Slot) <- none] </justified>
+       <finalized> F => F[epochOf(Slot) <- none] </finalized>
        ...
      </state>
      requires isFirstSlotOfEpoch(Slot)
@@ -171,7 +173,6 @@ rule <k> processJustification(Epoch)
          Epoch |-> As:Attestations
          ...
        </attested>
-       <justified> J </justified>
      //<validators> Validators </validators> // TODO: which validators to be considered?
        ...
      </state>
@@ -181,17 +182,9 @@ rule <k> processJustification(Epoch)
        <validators> Validators </validators> // TODO: which validators to be considered?
        ...
      </state>
-     requires Epoch >=Int 1 // TODO: check
-      andBool notBool Epoch in keys(J)
+     requires Epoch >=Int 1
 rule <k> processJustification(Epoch) => . ... </k>
-     <currentSlot> Slot </currentSlot>
-     <state>
-       <slot> Slot </slot>
-       <justified> J </justified>
-       ...
-     </state>
-     requires Epoch <Int 1 // TODO: check
-       orBool Epoch in keys(J)
+     requires Epoch <Int 1
 
 syntax Bool ::= isJustifiable(Int, Int, Attestations, Map) [function]
 rule isJustifiable(Epoch, EpochBoundaryBlock, Attestations, Validators)
@@ -220,8 +213,17 @@ rule <k> true ~> justify(Epoch,BlockID) => . ... </k>
      <currentSlot> Slot </currentSlot>
      <state>
        <slot> Slot </slot>
-       <justified> J => J[Epoch <- BlockID] </justified>
+       <justified> Epoch |-> (none => some BlockID) ... </justified>
        <lastJustified> _ => (Epoch, BlockID) </lastJustified>
+       ...
+     </state>
+// can be justified multiple times
+rule <k> true ~> justify(Epoch,BlockID) => . ... </k>
+     <currentSlot> Slot </currentSlot>
+     <state>
+       <slot> Slot </slot>
+       <justified> Epoch |-> some BlockID ... </justified>
+       <lastJustified> (Epoch, BlockID) </lastJustified>
        ...
      </state>
 rule <k> false ~> justify(_,_) => . ... </k>
@@ -241,27 +243,40 @@ rule <k> processFinalization(Epoch)
        <lastJustified> (SourceEpoch, SourceBlock) </lastJustified>
        ...
      </state>
-     requires Epoch >=Int 1 // TODO: check
+     requires Epoch >=Int 1
 rule <k> processFinalization(Epoch) => . ... </k>
-     requires Epoch <Int 1 // TODO: check
+     requires Epoch <Int 1
 
 // source : source+1 = target justified
 // source : source+1 : source+2 = target justified
 syntax Bool ::= isFinalizable(Int, Int, Map) [function]
 rule isFinalizable(SourceEpoch, TargetEpoch, Justified)
-  => SourceEpoch in keys(Justified) andBool TargetEpoch in keys(Justified)
+  => isJustified(SourceEpoch, Justified) andBool isJustified(TargetEpoch, Justified)
      andBool (
                 SourceEpoch +Int 1 ==Int TargetEpoch
-       orBool ( SourceEpoch +Int 2 ==Int TargetEpoch andBool SourceEpoch +Int 1 in keys(Justified) )
+       orBool ( SourceEpoch +Int 2 ==Int TargetEpoch andBool isJustified(SourceEpoch +Int 1, Justified) )
      )
+
+syntax Bool ::= isJustified(Int, Map) [function]
+rule isJustified(Epoch, Epoch |-> (some _) _:Map) => true
+rule isJustified(Epoch, Epoch |-> none     _:Map) => false
 
 syntax KItem ::= finalize(Int, Int)
 rule <k> true ~> finalize(Epoch, BlockID) => . ... </k>
      <currentSlot> Slot </currentSlot>
      <state>
        <slot> Slot </slot>
-       <finalized> F => F[Epoch <- BlockID] </finalized>
+       <finalized> Epoch |-> (none => some BlockID) ... </finalized>
        <lastFinalized> _ => (Epoch, BlockID) </lastFinalized>
+       ...
+     </state>
+// can be finalized multiple times
+rule <k> true ~> finalize(Epoch, BlockID) => . ... </k>
+     <currentSlot> Slot </currentSlot>
+     <state>
+       <slot> Slot </slot>
+       <finalized> Epoch |-> some BlockID ... </finalized>
+       <lastFinalized> (Epoch, BlockID) </lastFinalized>
        ...
      </state>
 rule <k> false ~> finalize(_, _) => . ... </k>

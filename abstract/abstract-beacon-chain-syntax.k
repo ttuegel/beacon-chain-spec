@@ -17,6 +17,7 @@ rule C:Cmd Cs:Cmds => C ~> Cs
 
 // data structures
 syntax Pair ::= "(" Int "," Int ")"
+syntax Option ::= "none" | "some" Int
 
 syntax Block ::= #Block(Pair,Pair,Attestations) // (slot,id), parent, attestations
 syntax Int          ::= Block ".slot"         [function]

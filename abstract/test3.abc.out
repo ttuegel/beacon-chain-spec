@@ -25,10 +25,10 @@
         0 |-> .Attestations
       </attested>
       <justified>
-        0 |-> 0
+        0 |-> some 0
       </justified>
       <finalized>
-        .Map
+        0 |-> some 0
       </finalized>
       <blocks>
         <bSlot>
@@ -77,10 +77,10 @@
         0 |-> .Attestations
       </attested>
       <justified>
-        0 |-> 0
+        0 |-> some 0
       </justified>
       <finalized>
-        .Map
+        0 |-> some 0
       </finalized>
       <blocks>
         <bSlot>
@@ -145,10 +145,10 @@
         0 |-> .Attestations
       </attested>
       <justified>
-        0 |-> 0
+        0 |-> some 0
       </justified>
       <finalized>
-        .Map
+        0 |-> some 0
       </finalized>
       <blocks>
         <bSlot>
@@ -213,10 +213,10 @@
         0 |-> .Attestations
       </attested>
       <justified>
-        0 |-> 0
+        0 |-> some 0
       </justified>
       <finalized>
-        .Map
+        0 |-> some 0
       </finalized>
       <blocks>
         <bSlot>
@@ -282,10 +282,12 @@
         1 |-> .Attestations
       </attested>
       <justified>
-        0 |-> 0
+        0 |-> some 0
+        1 |-> none
       </justified>
       <finalized>
-        .Map
+        0 |-> some 0
+        1 |-> none
       </finalized>
       <blocks>
         <bSlot>
@@ -367,10 +369,12 @@
         1 |-> #Attestation ( 90002 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90000 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
       </attested>
       <justified>
-        0 |-> 0
+        0 |-> some 0
+        1 |-> none
       </justified>
       <finalized>
-        .Map
+        0 |-> some 0
+        1 |-> none
       </finalized>
       <blocks>
         <bSlot>
@@ -468,10 +472,12 @@
         1 |-> #Attestation ( 90002 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90000 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
       </attested>
       <justified>
-        0 |-> 0
+        0 |-> some 0
+        1 |-> none
       </justified>
       <finalized>
-        .Map
+        0 |-> some 0
+        1 |-> none
       </finalized>
       <blocks>
         <bSlot>
@@ -569,10 +575,12 @@
         1 |-> #Attestation ( 90002 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90000 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
       </attested>
       <justified>
-        0 |-> 0
+        0 |-> some 0
+        1 |-> none
       </justified>
       <finalized>
-        .Map
+        0 |-> some 0
+        1 |-> none
       </finalized>
       <blocks>
         <bSlot>
@@ -671,10 +679,14 @@
         2 |-> .Attestations
       </attested>
       <justified>
-        0 |-> 0
+        0 |-> some 0
+        1 |-> none
+        2 |-> none
       </justified>
       <finalized>
-        .Map
+        0 |-> some 0
+        1 |-> none
+        2 |-> none
       </finalized>
       <blocks>
         <bSlot>
@@ -773,10 +785,14 @@
         2 |-> .Attestations
       </attested>
       <justified>
-        0 |-> 0
+        0 |-> some 0
+        1 |-> none
+        2 |-> none
       </justified>
       <finalized>
-        .Map
+        0 |-> some 0
+        1 |-> none
+        2 |-> none
       </finalized>
       <blocks>
         <bSlot>
@@ -891,10 +907,14 @@
         2 |-> .Attestations
       </attested>
       <justified>
-        0 |-> 0
+        0 |-> some 0
+        1 |-> none
+        2 |-> none
       </justified>
       <finalized>
-        .Map
+        0 |-> some 0
+        1 |-> none
+        2 |-> none
       </finalized>
       <blocks>
         <bSlot>
@@ -1009,10 +1029,14 @@
         2 |-> .Attestations
       </attested>
       <justified>
-        0 |-> 0
+        0 |-> some 0
+        1 |-> none
+        2 |-> none
       </justified>
       <finalized>
-        .Map
+        0 |-> some 0
+        1 |-> none
+        2 |-> none
       </finalized>
       <blocks>
         <bSlot>
@@ -1128,11 +1152,16 @@
         3 |-> .Attestations
       </attested>
       <justified>
-        0 |-> 0
-        1 |-> 10004
+        0 |-> some 0
+        1 |-> some 10004
+        2 |-> none
+        3 |-> none
       </justified>
       <finalized>
-        0 |-> 0
+        0 |-> some 0
+        1 |-> none
+        2 |-> none
+        3 |-> none
       </finalized>
       <blocks>
         <bSlot>
