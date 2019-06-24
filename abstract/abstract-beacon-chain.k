@@ -51,7 +51,7 @@ rule <k> init => . ... </k>
            90006 |-> #Validator(90006,1)
          </validators>
          <attested> 0 |-> .Attestations </attested>
-         <justified> .Map </justified>
+         <justified> 0 |-> 0 </justified>
          <finalized> .Map </finalized>
          <blocks>
            <block>
@@ -130,6 +130,10 @@ rule <k> processAttestations(A As => As) ... </k>
          A.target_epoch |-> (Atts:Attestations => A Atts)
          ...
        </attested>
+       ...
+     </state>
+     <state>
+       <slot> firstSlotOf(A.target_epoch) </slot>
        <lastJustified> (JEpoch,JBlock) </lastJustified>
        ...
      </state>
@@ -140,7 +144,9 @@ rule processAttestations(.Attestations) => .
 
 rule <k> processEpoch()
       => processJustification(epochOf(Slot) -Int 2)
-      ~> processJustification(epochOf(Slot) -Int 1) ... </k>
+      ~> processJustification(epochOf(Slot) -Int 1)
+      ~> processFinalization(epochOf(Slot) -Int 2)
+      ~> processFinalization(epochOf(Slot) -Int 1) ... </k>
      <currentSlot> Slot </currentSlot>
      <state>
        <slot> Slot </slot>
@@ -176,7 +182,6 @@ rule <k> processJustification(Epoch)
      </state>
      requires Epoch >=Int 1 // TODO: check
       andBool notBool Epoch in keys(J)
-     [otherwise]
 rule <k> processJustification(Epoch) => . ... </k>
      <currentSlot> Slot </currentSlot>
      <state>
@@ -219,5 +224,45 @@ rule <k> true ~> justify(Epoch,BlockID) => . ... </k>
        ...
      </state>
 rule <k> false ~> justify(_,_) => . ... </k>
+
+syntax KItem ::= processFinalization(Int)
+rule <k> processFinalization(Epoch)
+      => isFinalizable(SourceEpoch, Epoch, Justified)
+      ~> finalize(SourceEpoch, SourceBlock) ... </k>
+     <currentSlot> Slot </currentSlot>
+     <state>
+       <slot> Slot </slot>
+       <justified> Justified </justified>
+       ...
+     </state>
+     <state>
+       <slot> firstSlotOf(Epoch) </slot>
+       <lastJustified> (SourceEpoch,SourceBlock) </lastJustified>
+       ...
+     </state>
+     requires Epoch >=Int 1 // TODO: check
+rule <k> processFinalization(Epoch) => . ... </k>
+     requires Epoch <Int 1 // TODO: check
+
+// source : source+1 = target justified
+// source : source+1 : source+2 = target justified
+syntax Bool ::= isFinalizable(Int, Int, Map) [function]
+rule isFinalizable(SourceEpoch, TargetEpoch, Justified)
+  => SourceEpoch in keys(Justified) andBool TargetEpoch in keys(Justified)
+     andBool (
+                SourceEpoch +Int 1 ==Int TargetEpoch
+       orBool ( SourceEpoch +Int 2 ==Int TargetEpoch andBool SourceEpoch +Int 1 in keys(Justified) )
+     )
+
+syntax KItem ::= finalize(Int, Int)
+rule <k> true ~> finalize(Epoch,BlockID) => . ... </k>
+     <currentSlot> Slot </currentSlot>
+     <state>
+       <slot> Slot </slot>
+       <finalized> F => F[Epoch <- BlockID] </finalized>
+       <lastFinalized> _ => (Epoch,BlockID) </lastFinalized>
+       ...
+     </state>
+rule <k> false ~> finalize(_,_) => . ... </k>
 
 endmodule

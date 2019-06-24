@@ -25,7 +25,7 @@
         0 |-> .Attestations
       </attested>
       <justified>
-        .Map
+        0 |-> 0
       </justified>
       <finalized>
         .Map
@@ -77,7 +77,7 @@
         0 |-> .Attestations
       </attested>
       <justified>
-        .Map
+        0 |-> 0
       </justified>
       <finalized>
         .Map
@@ -145,7 +145,7 @@
         0 |-> .Attestations
       </attested>
       <justified>
-        .Map
+        0 |-> 0
       </justified>
       <finalized>
         .Map
@@ -213,7 +213,7 @@
         0 |-> .Attestations
       </attested>
       <justified>
-        .Map
+        0 |-> 0
       </justified>
       <finalized>
         .Map
@@ -282,7 +282,7 @@
         1 |-> .Attestations
       </attested>
       <justified>
-        .Map
+        0 |-> 0
       </justified>
       <finalized>
         .Map
@@ -367,7 +367,7 @@
         1 |-> #Attestation ( 90004 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90003 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90002 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90000 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
       </attested>
       <justified>
-        .Map
+        0 |-> 0
       </justified>
       <finalized>
         .Map
@@ -468,7 +468,7 @@
         1 |-> #Attestation ( 90004 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90003 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90002 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90000 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
       </attested>
       <justified>
-        .Map
+        0 |-> 0
       </justified>
       <finalized>
         .Map
@@ -569,7 +569,7 @@
         1 |-> #Attestation ( 90004 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90003 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90002 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90000 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
       </attested>
       <justified>
-        .Map
+        0 |-> 0
       </justified>
       <finalized>
         .Map
@@ -671,10 +671,11 @@
         2 |-> .Attestations
       </attested>
       <justified>
+        0 |-> 0
         1 |-> 10004
       </justified>
       <finalized>
-        .Map
+        0 |-> 0
       </finalized>
       <blocks>
         <bSlot>
