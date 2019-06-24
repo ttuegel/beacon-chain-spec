@@ -62,7 +62,7 @@
         .Map
       </validators>
       <attested>
-        0 |-> #Attestation ( ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+        0 |-> #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
       </attested>
       <justified>
         .Map
@@ -100,7 +100,7 @@
             ( 0 , 0 )
           </parent>
           <attestations>
-            #Attestation ( ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+            #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
           </attestations>
         </block>
       </blocks>
@@ -124,7 +124,7 @@
         .Map
       </validators>
       <attested>
-        0 |-> #Attestation ( ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+        0 |-> #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
       </attested>
       <justified>
         .Map
@@ -162,7 +162,7 @@
             ( 0 , 0 )
           </parent>
           <attestations>
-            #Attestation ( ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+            #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
           </attestations>
         </block>
       </blocks>
@@ -186,7 +186,7 @@
         .Map
       </validators>
       <attested>
-        0 |-> #Attestation ( ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+        0 |-> #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
       </attested>
       <justified>
         .Map
@@ -224,7 +224,7 @@
             ( 0 , 0 )
           </parent>
           <attestations>
-            #Attestation ( ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+            #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
           </attestations>
         </block>
         <bSlot>
@@ -264,7 +264,7 @@
         .Map
       </validators>
       <attested>
-        0 |-> #Attestation ( ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+        0 |-> #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
       </attested>
       <justified>
         .Map
@@ -302,7 +302,7 @@
             ( 0 , 0 )
           </parent>
           <attestations>
-            #Attestation ( ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+            #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
           </attestations>
         </block>
         <bSlot>

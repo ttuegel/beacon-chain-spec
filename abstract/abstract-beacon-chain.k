@@ -128,20 +128,23 @@ rule <k> processAttestations(A As => As) ... </k>
      </state>
      requires A.source_epoch ==Int JEpoch
       andBool A.source_block ==Int JBlock
+      //TODO: check if A.attester is assigned to the slot
 rule processAttestations(.Attestations) => .
 
-rule <k> processEpoch() => justify((Slot /Int SLOTS_PER_EPOCH) -Int 1) ... </k>
+rule <k> processEpoch()
+      => processJustification(epochOf(Slot) -Int 2)
+      ~> processJustification(epochOf(Slot) -Int 1) ... </k>
      <currentSlot> Slot </currentSlot>
-     requires Slot %Int SLOTS_PER_EPOCH ==Int 0 // Slot is the first slot of an epoch
+     requires isFirstSlotOfEpoch(Slot)
 
 rule <k> processEpoch() => . ... </k>
      <currentSlot> Slot </currentSlot>
-     requires Slot %Int SLOTS_PER_EPOCH =/=Int 0
+     requires notBool isFirstSlotOfEpoch(Slot)
 
-syntax KItem ::= justify(Int)
-rule <k> justify(Epoch)
-      => collectVotes(Epoch *Int SLOTS_PER_EPOCH, As, .Attestations)
-         ... </k>
+syntax KItem ::= processJustification(Int)
+rule <k> processJustification(Epoch)
+      => isJustifiable(Epoch, EpochBoundaryBlock, As, Validators)
+      ~> justify(Epoch, EpochBoundaryBlock) ... </k>
      <currentSlot> Slot </currentSlot>
      <state>
        <slot> Slot </slot>
@@ -149,19 +152,47 @@ rule <k> justify(Epoch)
          Epoch |-> As:Attestations
          ...
        </attested>
+     //<validators> Validators </validators> // TODO: which validators to be considered?
+       ...
+     </state>
+     <state>
+       <slot> firstSlotOf(Epoch) </slot>
+       <lastBlock> (_,EpochBoundaryBlock) </lastBlock>
+       <validators> Validators </validators> // TODO: which validators to be considered?
        ...
      </state>
 
-syntax KItem ::= collectVotes(Int, Attestations, Attestations)
-rule <k> collectVotes(EpochSlot, A Attestations, As)
-      => collectVotes(EpochSlot,   Attestations, #if A.target_block ==Int EpochBoundaryBlockID
-                                                 #then A As
-                                                 #else   As
-                                                 #fi) ... </k>
+syntax Bool ::= isJustifiable(Int, Int, Attestations, Map) [function]
+rule isJustifiable(Epoch, EpochBoundaryBlock, Attestations, Validators)
+  => isMajority(attestationsBalance(EpochBoundaryBlock, Attestations, Validators), totalBalance(Validators))
+
+syntax Bool ::= isMajority(Int, Int) [function]
+rule isMajority(X, Total) => (X *Int 3) >=Int (Total *Int 2)  // (X / Total) >= 2/3
+
+syntax Int ::= attestationsBalance(Int, Attestations, Map) [function]
+rule attestationsBalance(Target, A Attestations, Validators)
+  => #if A.target_block ==Int Target
+     #then balanceOf(A, Validators)
+     #else 0
+     #fi +Int attestationsBalance(Target, Attestations, Validators)
+rule attestationsBalance(_, .Attestations, _) => 0
+
+syntax Int ::= balanceOf(Attestation, Map) [function]
+rule balanceOf(A, A.attester |-> V:Validator _:Map) => V.balance
+
+syntax Int ::= totalBalance(Map) [function]
+rule totalBalance(_ |-> V:Validator M:Map) => V.balance +Int totalBalance(M)
+rule totalBalance(.Map) => 0
+
+syntax KItem ::= justify(Int, Int)
+rule <k> true ~> justify(Epoch,BlockID) => . ... </k>
+     <currentSlot> Slot </currentSlot>
      <state>
-       <slot> EpochSlot </slot>
-       <lastBlock> (_,EpochBoundaryBlockID) </lastBlock>
+       <slot> Slot </slot>
+       <justified> J => J[Epoch <- BlockID] </justified>
+       <lastJustified> _ => (Epoch,BlockID) </lastJustified>
        ...
      </state>
+rule <k> false ~> justify(_,_) => . ... </k>
 
 endmodule
