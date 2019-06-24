@@ -139,7 +139,8 @@ rule <k> processAttestations(A As => As) ... </k>
      </state>
      requires A.source_epoch ==Int JEpoch
       andBool A.source_block ==Int JBlock
-      //TODO: check if A.attester is assigned to the slot
+      andBool A.slot +Int MIN_ATTESTATION_INCLUSION_DELAY <=Int Slot andBool Slot <=Int A.slot +Int MAX_ATTESTATION_INCLUSION_DELAY
+      //TODO: check if A.attester is assigned to A.slot
 rule processAttestations(.Attestations) => .
 
 rule <k> processEpoch()

@@ -364,7 +364,7 @@
       </validators>
       <attested>
         0 |-> .Attestations
-        1 |-> #Attestation ( 90004 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90003 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90002 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90000 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
+        1 |-> #Attestation ( 90004 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90003 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90002 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90000 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
       </attested>
       <justified>
         0 |-> 0
@@ -434,7 +434,7 @@
             ( 4 , 10004 )
           </parent>
           <attestations>
-            #Attestation ( 90000 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90002 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90003 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90004 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
+            #Attestation ( 90000 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90002 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90003 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90004 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
           </attestations>
         </block>
       </blocks>
@@ -465,7 +465,7 @@
       </validators>
       <attested>
         0 |-> .Attestations
-        1 |-> #Attestation ( 90004 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90003 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90002 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90000 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
+        1 |-> #Attestation ( 90004 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90003 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90002 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90000 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
       </attested>
       <justified>
         0 |-> 0
@@ -535,7 +535,7 @@
             ( 4 , 10004 )
           </parent>
           <attestations>
-            #Attestation ( 90000 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90002 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90003 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90004 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
+            #Attestation ( 90000 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90002 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90003 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90004 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
           </attestations>
         </block>
       </blocks>
@@ -566,7 +566,7 @@
       </validators>
       <attested>
         0 |-> .Attestations
-        1 |-> #Attestation ( 90004 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90003 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90002 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90000 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
+        1 |-> #Attestation ( 90004 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90003 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90002 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90000 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
       </attested>
       <justified>
         0 |-> 0
@@ -636,7 +636,7 @@
             ( 4 , 10004 )
           </parent>
           <attestations>
-            #Attestation ( 90000 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90002 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90003 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90004 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
+            #Attestation ( 90000 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90002 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90003 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90004 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
           </attestations>
         </block>
       </blocks>
@@ -667,7 +667,7 @@
       </validators>
       <attested>
         0 |-> .Attestations
-        1 |-> #Attestation ( 90004 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90003 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90002 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90000 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
+        1 |-> #Attestation ( 90004 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90003 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90002 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90000 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
         2 |-> .Attestations
       </attested>
       <justified>
@@ -739,7 +739,7 @@
             ( 4 , 10004 )
           </parent>
           <attestations>
-            #Attestation ( 90000 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90002 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90003 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90004 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
+            #Attestation ( 90000 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90001 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90002 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90003 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  #Attestation ( 90004 , 4 , ( 0 , 0 ) , ( 1 , 10004 ) )  .Attestations
           </attestations>
         </block>
       </blocks>

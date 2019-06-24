@@ -74,7 +74,7 @@
         90006 |-> #Validator ( 90006 , 1 )
       </validators>
       <attested>
-        0 |-> #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+        0 |-> #Attestation ( 0 , 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
       </attested>
       <justified>
         0 |-> 0
@@ -112,7 +112,7 @@
             ( 0 , 0 )
           </parent>
           <attestations>
-            #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+            #Attestation ( 0 , 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
           </attestations>
         </block>
       </blocks>
@@ -142,7 +142,7 @@
         90006 |-> #Validator ( 90006 , 1 )
       </validators>
       <attested>
-        0 |-> #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+        0 |-> #Attestation ( 0 , 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
       </attested>
       <justified>
         0 |-> 0
@@ -180,7 +180,7 @@
             ( 0 , 0 )
           </parent>
           <attestations>
-            #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+            #Attestation ( 0 , 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
           </attestations>
         </block>
       </blocks>
@@ -210,7 +210,7 @@
         90006 |-> #Validator ( 90006 , 1 )
       </validators>
       <attested>
-        0 |-> #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+        0 |-> #Attestation ( 0 , 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
       </attested>
       <justified>
         0 |-> 0
@@ -248,7 +248,7 @@
             ( 0 , 0 )
           </parent>
           <attestations>
-            #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+            #Attestation ( 0 , 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
           </attestations>
         </block>
         <bSlot>
@@ -294,7 +294,7 @@
         90006 |-> #Validator ( 90006 , 1 )
       </validators>
       <attested>
-        0 |-> #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+        0 |-> #Attestation ( 0 , 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
         1 |-> .Attestations
       </attested>
       <justified>
@@ -333,7 +333,7 @@
             ( 0 , 0 )
           </parent>
           <attestations>
-            #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+            #Attestation ( 0 , 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
           </attestations>
         </block>
         <bSlot>

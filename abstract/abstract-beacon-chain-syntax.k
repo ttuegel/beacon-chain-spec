@@ -29,17 +29,19 @@ rule #Block((_,_),X,_).parent       => X
 rule #Block((_,_),_,X).attestations => X
 
 syntax Attestations ::= List{Attestation,""}
-syntax Attestation  ::= #Attestation(Int,Pair,Pair) // attester, source epoch/block, target epoch/block
+syntax Attestation  ::= #Attestation(Int,Int,Pair,Pair) // attester, assigned slot, source epoch/block, target epoch/block
 syntax Int ::= Attestation ".attester"     [function]
+syntax Int ::= Attestation ".slot"         [function]
 syntax Int ::= Attestation ".source_epoch" [function]
 syntax Int ::= Attestation ".source_block" [function]
 syntax Int ::= Attestation ".target_epoch" [function]
 syntax Int ::= Attestation ".target_block" [function]
-rule #Attestation(X,(_,_),(_,_)).attester     => X
-rule #Attestation(_,(X,_),(_,_)).source_epoch => X
-rule #Attestation(_,(_,X),(_,_)).source_block => X
-rule #Attestation(_,(_,_),(X,_)).target_epoch => X
-rule #Attestation(_,(_,_),(_,X)).target_block => X
+rule #Attestation(X,_,(_,_),(_,_)).attester     => X
+rule #Attestation(_,X,(_,_),(_,_)).slot         => X
+rule #Attestation(_,_,(X,_),(_,_)).source_epoch => X
+rule #Attestation(_,_,(_,X),(_,_)).source_block => X
+rule #Attestation(_,_,(_,_),(X,_)).target_epoch => X
+rule #Attestation(_,_,(_,_),(_,X)).target_block => X
 
 syntax Validator ::= #Validator(Int,Int) // id, balance
 syntax Int ::= Validator ".id"      [function]
@@ -48,7 +50,9 @@ rule #Validator(X,_).id      => X
 rule #Validator(_,X).balance => X
 
 // macros
-syntax Int ::= "SLOTS_PER_EPOCH"  rule SLOTS_PER_EPOCH => 4 /* 64 */ [macro]
+syntax Int ::= "SLOTS_PER_EPOCH"                  rule SLOTS_PER_EPOCH                 => 4 /* 64 */      [macro]
+syntax Int ::= "MIN_ATTESTATION_INCLUSION_DELAY"  rule MIN_ATTESTATION_INCLUSION_DELAY => 1 /*  4 */      [macro]
+syntax Int ::= "MAX_ATTESTATION_INCLUSION_DELAY"  rule MAX_ATTESTATION_INCLUSION_DELAY => SLOTS_PER_EPOCH [macro]
 
 syntax Int ::= epochOf(Int)     [function]
              | firstSlotOf(Int) [function]
