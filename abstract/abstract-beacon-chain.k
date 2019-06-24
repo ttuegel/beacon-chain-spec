@@ -41,7 +41,15 @@ rule <k> init => . ... </k>
      <states> .Bag =>
        <state>
          <slot> 0 </slot>
-         <validators> .Map </validators>
+         <validators>
+           90000 |-> #Validator(90000,1)
+           90001 |-> #Validator(90001,1)
+           90002 |-> #Validator(90002,1)
+           90003 |-> #Validator(90003,1)
+           90004 |-> #Validator(90004,1)
+           90005 |-> #Validator(90005,1)
+           90006 |-> #Validator(90006,1)
+         </validators>
          <attested> 0 |-> .Attestations </attested>
          <justified> .Map </justified>
          <finalized> .Map </finalized>
@@ -92,7 +100,6 @@ rule <k> processSlots(TargetSlot) => . ... </k>
 
 rule <k> processSlot() => . ... </k>
 
-// TODO:
 rule <k> processBlock(#Block((Slot,ID),Parent,Attestations))
       => processAttestations(Attestations) ... </k>
      <currentSlot> Slot </currentSlot>
@@ -135,6 +142,11 @@ rule <k> processEpoch()
       => processJustification(epochOf(Slot) -Int 2)
       ~> processJustification(epochOf(Slot) -Int 1) ... </k>
      <currentSlot> Slot </currentSlot>
+     <state>
+       <slot> Slot </slot>
+       <attested> A => A[epochOf(Slot) <- .Attestations] </attested>
+       ...
+     </state>
      requires isFirstSlotOfEpoch(Slot)
 
 rule <k> processEpoch() => . ... </k>
@@ -152,6 +164,7 @@ rule <k> processJustification(Epoch)
          Epoch |-> As:Attestations
          ...
        </attested>
+       <justified> J </justified>
      //<validators> Validators </validators> // TODO: which validators to be considered?
        ...
      </state>
@@ -161,6 +174,18 @@ rule <k> processJustification(Epoch)
        <validators> Validators </validators> // TODO: which validators to be considered?
        ...
      </state>
+     requires Epoch >=Int 1 // TODO: check
+      andBool notBool Epoch in keys(J)
+     [otherwise]
+rule <k> processJustification(Epoch) => . ... </k>
+     <currentSlot> Slot </currentSlot>
+     <state>
+       <slot> Slot </slot>
+       <justified> J </justified>
+       ...
+     </state>
+     requires Epoch <Int 1 // TODO: check
+       orBool Epoch in keys(J)
 
 syntax Bool ::= isJustifiable(Int, Int, Attestations, Map) [function]
 rule isJustifiable(Epoch, EpochBoundaryBlock, Attestations, Validators)

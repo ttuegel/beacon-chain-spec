@@ -13,7 +13,13 @@
         0
       </slot>
       <validators>
-        .Map
+        90000 |-> #Validator ( 90000 , 1 )
+        90001 |-> #Validator ( 90001 , 1 )
+        90002 |-> #Validator ( 90002 , 1 )
+        90003 |-> #Validator ( 90003 , 1 )
+        90004 |-> #Validator ( 90004 , 1 )
+        90005 |-> #Validator ( 90005 , 1 )
+        90006 |-> #Validator ( 90006 , 1 )
       </validators>
       <attested>
         0 |-> .Attestations
@@ -59,7 +65,13 @@
         1
       </slot>
       <validators>
-        .Map
+        90000 |-> #Validator ( 90000 , 1 )
+        90001 |-> #Validator ( 90001 , 1 )
+        90002 |-> #Validator ( 90002 , 1 )
+        90003 |-> #Validator ( 90003 , 1 )
+        90004 |-> #Validator ( 90004 , 1 )
+        90005 |-> #Validator ( 90005 , 1 )
+        90006 |-> #Validator ( 90006 , 1 )
       </validators>
       <attested>
         0 |-> #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
@@ -121,7 +133,13 @@
         2
       </slot>
       <validators>
-        .Map
+        90000 |-> #Validator ( 90000 , 1 )
+        90001 |-> #Validator ( 90001 , 1 )
+        90002 |-> #Validator ( 90002 , 1 )
+        90003 |-> #Validator ( 90003 , 1 )
+        90004 |-> #Validator ( 90004 , 1 )
+        90005 |-> #Validator ( 90005 , 1 )
+        90006 |-> #Validator ( 90006 , 1 )
       </validators>
       <attested>
         0 |-> #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
@@ -183,7 +201,13 @@
         3
       </slot>
       <validators>
-        .Map
+        90000 |-> #Validator ( 90000 , 1 )
+        90001 |-> #Validator ( 90001 , 1 )
+        90002 |-> #Validator ( 90002 , 1 )
+        90003 |-> #Validator ( 90003 , 1 )
+        90004 |-> #Validator ( 90004 , 1 )
+        90005 |-> #Validator ( 90005 , 1 )
+        90006 |-> #Validator ( 90006 , 1 )
       </validators>
       <attested>
         0 |-> #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
@@ -261,10 +285,17 @@
         4
       </slot>
       <validators>
-        .Map
+        90000 |-> #Validator ( 90000 , 1 )
+        90001 |-> #Validator ( 90001 , 1 )
+        90002 |-> #Validator ( 90002 , 1 )
+        90003 |-> #Validator ( 90003 , 1 )
+        90004 |-> #Validator ( 90004 , 1 )
+        90005 |-> #Validator ( 90005 , 1 )
+        90006 |-> #Validator ( 90006 , 1 )
       </validators>
       <attested>
         0 |-> #Attestation ( 0 , ( 0 , 0 ) , ( 0 , 10001 ) )  .Attestations
+        1 |-> .Attestations
       </attested>
       <justified>
         .Map

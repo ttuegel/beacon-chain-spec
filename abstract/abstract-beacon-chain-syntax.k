@@ -48,7 +48,7 @@ rule #Validator(X,_).id      => X
 rule #Validator(_,X).balance => X
 
 // macros
-syntax Int ::= "SLOTS_PER_EPOCH"  rule SLOTS_PER_EPOCH => 64 [macro]
+syntax Int ::= "SLOTS_PER_EPOCH"  rule SLOTS_PER_EPOCH => 4 /* 64 */ [macro]
 
 syntax Int ::= epochOf(Int)     [function]
              | firstSlotOf(Int) [function]
