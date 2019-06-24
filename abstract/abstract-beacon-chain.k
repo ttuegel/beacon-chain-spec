@@ -100,7 +100,7 @@ rule <k> processSlots(TargetSlot) => . ... </k>
 
 rule <k> processSlot() => . ... </k>
 
-rule <k> processBlock(#Block((Slot,ID),Parent,Attestations))
+rule <k> processBlock(#Block((Slot, ID), Parent, Attestations))
       => processAttestations(Attestations) ... </k>
      <currentSlot> Slot </currentSlot>
      <state>
@@ -117,7 +117,7 @@ rule <k> processBlock(#Block((Slot,ID),Parent,Attestations))
        )
          ...
        </blocks>
-       <lastBlock> Parent => (Slot,ID) </lastBlock>
+       <lastBlock> Parent => (Slot, ID) </lastBlock>
        ...
      </state>
 
@@ -134,7 +134,7 @@ rule <k> processAttestations(A As => As) ... </k>
      </state>
      <state>
        <slot> firstSlotOf(A.target_epoch) </slot>
-       <lastJustified> (JEpoch,JBlock) </lastJustified>
+       <lastJustified> (JEpoch, JBlock) </lastJustified>
        ...
      </state>
      requires A.source_epoch ==Int JEpoch
@@ -176,7 +176,7 @@ rule <k> processJustification(Epoch)
      </state>
      <state>
        <slot> firstSlotOf(Epoch) </slot>
-       <lastBlock> (_,EpochBoundaryBlock) </lastBlock>
+       <lastBlock> (_, EpochBoundaryBlock) </lastBlock>
        <validators> Validators </validators> // TODO: which validators to be considered?
        ...
      </state>
@@ -220,7 +220,7 @@ rule <k> true ~> justify(Epoch,BlockID) => . ... </k>
      <state>
        <slot> Slot </slot>
        <justified> J => J[Epoch <- BlockID] </justified>
-       <lastJustified> _ => (Epoch,BlockID) </lastJustified>
+       <lastJustified> _ => (Epoch, BlockID) </lastJustified>
        ...
      </state>
 rule <k> false ~> justify(_,_) => . ... </k>
@@ -237,7 +237,7 @@ rule <k> processFinalization(Epoch)
      </state>
      <state>
        <slot> firstSlotOf(Epoch) </slot>
-       <lastJustified> (SourceEpoch,SourceBlock) </lastJustified>
+       <lastJustified> (SourceEpoch, SourceBlock) </lastJustified>
        ...
      </state>
      requires Epoch >=Int 1 // TODO: check
@@ -255,14 +255,14 @@ rule isFinalizable(SourceEpoch, TargetEpoch, Justified)
      )
 
 syntax KItem ::= finalize(Int, Int)
-rule <k> true ~> finalize(Epoch,BlockID) => . ... </k>
+rule <k> true ~> finalize(Epoch, BlockID) => . ... </k>
      <currentSlot> Slot </currentSlot>
      <state>
        <slot> Slot </slot>
        <finalized> F => F[Epoch <- BlockID] </finalized>
-       <lastFinalized> _ => (Epoch,BlockID) </lastFinalized>
+       <lastFinalized> _ => (Epoch, BlockID) </lastFinalized>
        ...
      </state>
-rule <k> false ~> finalize(_,_) => . ... </k>
+rule <k> false ~> finalize(_, _) => . ... </k>
 
 endmodule
