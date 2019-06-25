@@ -78,17 +78,11 @@ rule <k> (. => processSlot()
       ~> processSlots(TargetSlot) ... </k>
      <currentSlot> Slot => Slot +Int 1 </currentSlot>
      <states>
-       <state>
-         <slot> Slot </slot>
-         S
-       </state>
+       <state> <slot> Slot        </slot> S </state>
      (
        .Bag
      =>
-       <state>
-         <slot> Slot +Int 1 </slot>
-         S
-       </state>
+       <state> <slot> Slot +Int 1 </slot> S </state>
      )
        ...
      </states>
@@ -122,12 +116,12 @@ rule <k> processBlock(#Block((Slot, ID), Parent, Attestations))
      </state>
 
 syntax KItem ::= processAttestations(Attestations)
-rule <k> processAttestations(A As => As) ... </k>
+rule <k> processAttestations(A Attestations => Attestations) ... </k>
      <currentSlot> Slot </currentSlot>
      <state>
        <slot> Slot </slot>
        <attested>
-         A.target_epoch |-> (Atts:Attestations => A Atts)
+         A.target_epoch |-> (As:Attestations => A As)
          ...
        </attested>
        ...
@@ -164,13 +158,13 @@ rule <k> processEpoch() => . ... </k>
 
 syntax KItem ::= processJustification(Int)
 rule <k> processJustification(Epoch)
-      => isJustifiable(Epoch, EpochBoundaryBlock, As, Validators)
+      => isJustifiable(EpochBoundaryBlock, Attestations, Validators)
       ~> justify(Epoch, EpochBoundaryBlock) ... </k>
      <currentSlot> Slot </currentSlot>
      <state>
        <slot> Slot </slot>
        <attested>
-         Epoch |-> As:Attestations
+         Epoch |-> Attestations:Attestations
          ...
        </attested>
      //<validators> Validators </validators> // TODO: which validators to be considered?
@@ -186,8 +180,8 @@ rule <k> processJustification(Epoch)
 rule <k> processJustification(Epoch) => . ... </k>
      requires Epoch <Int 1
 
-syntax Bool ::= isJustifiable(Int, Int, Attestations, Map) [function]
-rule isJustifiable(Epoch, EpochBoundaryBlock, Attestations, Validators)
+syntax Bool ::= isJustifiable(Int, Attestations, Map) [function]
+rule isJustifiable(EpochBoundaryBlock, Attestations, Validators)
   => isMajority(attestationsBalance(EpochBoundaryBlock, Attestations, Validators), totalBalance(Validators))
 
 syntax Bool ::= isMajority(Int, Int) [function]
@@ -229,8 +223,8 @@ rule <k> true ~> justify(Epoch,BlockID) => . ... </k>
 rule <k> false ~> justify(_,_) => . ... </k>
 
 syntax KItem ::= processFinalization(Int)
-rule <k> processFinalization(Epoch)
-      => isFinalizable(SourceEpoch, Epoch, Justified)
+rule <k> processFinalization(TargetEpoch)
+      => isFinalizable(SourceEpoch, TargetEpoch, Justified)
       ~> finalize(SourceEpoch, SourceBlock) ... </k>
      <currentSlot> Slot </currentSlot>
      <state>
@@ -239,13 +233,13 @@ rule <k> processFinalization(Epoch)
        ...
      </state>
      <state>
-       <slot> firstSlotOf(Epoch) </slot>
+       <slot> firstSlotOf(TargetEpoch) </slot>
        <lastJustified> (SourceEpoch, SourceBlock) </lastJustified>
        ...
      </state>
-     requires Epoch >=Int 1
-rule <k> processFinalization(Epoch) => . ... </k>
-     requires Epoch <Int 1
+     requires TargetEpoch >=Int 1
+rule <k> processFinalization(TargetEpoch) => . ... </k>
+     requires TargetEpoch <Int 1
 
 // source : source+1 = target justified
 // source : source+1 : source+2 = target justified
