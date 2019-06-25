@@ -33,8 +33,6 @@ configuration <T>
   </states>
 </T>
 
-syntax KItem ::= "TODO"
-
 syntax KItem ::= "init"
 rule <k> init => . ... </k>
      <currentSlot> 0 </currentSlot>
@@ -114,6 +112,7 @@ rule <k> processBlock(#Block((Slot, ID), Parent, Attestations))
        <lastBlock> Parent => (Slot, ID) </lastBlock>
        ...
      </state>
+     // TODO: check if the block proposer is valid (assigned, not slashed)
 
 syntax KItem ::= processAttestations(Attestations)
 rule <k> processAttestations(A Attestations => Attestations) ... </k>
@@ -134,7 +133,8 @@ rule <k> processAttestations(A Attestations => Attestations) ... </k>
      requires A.source_epoch ==Int JEpoch
       andBool A.source_block ==Int JBlock
       andBool A.slot +Int MIN_ATTESTATION_INCLUSION_DELAY <=Int Slot andBool Slot <=Int A.slot +Int MAX_ATTESTATION_INCLUSION_DELAY
-      //TODO: check if A.attester is assigned to A.slot
+      andBool epochOf(A.slot) ==Int A.target_epoch
+      // TODO: check if A.attester is assigned to A.slot, and not slashed
 rule processAttestations(.Attestations) => .
 
 rule <k> processEpoch()
