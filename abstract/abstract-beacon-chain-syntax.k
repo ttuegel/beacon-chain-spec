@@ -44,16 +44,31 @@ rule #Attestation(_,_,(_,X),(_,_)).source_block => X
 rule #Attestation(_,_,(_,_),(X,_)).target_epoch => X
 rule #Attestation(_,_,(_,_),(_,X)).target_block => X
 
-syntax Validator ::= #Validator(Int,Int) // id, balance
-syntax Int ::= Validator ".id"      [function]
-syntax Int ::= Validator ".balance" [function]
-rule #Validator(X,_).id      => X
-rule #Validator(_,X).balance => X
+syntax Validator ::= #Validator(Int,Int,Pair,Pair) // id, balance, join epoch (eligible, actual), exit epoch (eligible, actual)
+syntax Int ::= Validator ".id"                  [function]
+syntax Int ::= Validator ".balance"             [function]
+syntax Int ::= Validator ".join_epoch_eligible" [function]
+syntax Int ::= Validator ".join_epoch_actual"   [function]
+syntax Int ::= Validator ".exit_epoch_eligible" [function]
+syntax Int ::= Validator ".exit_epoch_actual"   [function]
+rule #Validator(X,_,(_,_),(_,_)).id                  => X
+rule #Validator(_,X,(_,_),(_,_)).balance             => X
+rule #Validator(_,_,(X,_),(_,_)).join_epoch_eligible => X
+rule #Validator(_,_,(_,X),(_,_)).join_epoch_actual   => X
+rule #Validator(_,_,(_,_),(X,_)).exit_epoch_eligible => X
+rule #Validator(_,_,(_,_),(_,X)).exit_epoch_actual   => X
+
+syntax Deposit ::= #Deposit(Int,Int) // sender, amount
+syntax Int ::= Deposit ".sender" [function]
+syntax Int ::= Deposit ".amount" [function]
+rule #Deposit(X,_).sender => X
+rule #Deposit(_,X).amount => X
 
 // macros
-syntax Int ::= "SLOTS_PER_EPOCH"                  rule SLOTS_PER_EPOCH                 => 4 /* 64 */      [macro]
-syntax Int ::= "MIN_ATTESTATION_INCLUSION_DELAY"  rule MIN_ATTESTATION_INCLUSION_DELAY => 1 /*  4 */      [macro]
-syntax Int ::= "MAX_ATTESTATION_INCLUSION_DELAY"  rule MAX_ATTESTATION_INCLUSION_DELAY => SLOTS_PER_EPOCH [macro]
+syntax Int ::= "SLOTS_PER_EPOCH"                  rule SLOTS_PER_EPOCH                 =>      4 /* 64 */       [macro]
+syntax Int ::= "MIN_ATTESTATION_INCLUSION_DELAY"  rule MIN_ATTESTATION_INCLUSION_DELAY =>      1 /*  4 */       [macro]
+syntax Int ::= "MAX_ATTESTATION_INCLUSION_DELAY"  rule MAX_ATTESTATION_INCLUSION_DELAY => SLOTS_PER_EPOCH       [macro]
+syntax Int ::= "FAR_FUTURE_EPOCH"                 rule FAR_FUTURE_EPOCH                => 999999 /* 2^64 - 1 */ [macro]
 
 syntax Int ::= epochOf(Int)     [function]
              | firstSlotOf(Int) [function]

@@ -40,13 +40,13 @@ rule <k> init => . ... </k>
        <state>
          <slot> 0 </slot>
          <validators>
-           90000 |-> #Validator(90000,1)
-           90001 |-> #Validator(90001,1)
-           90002 |-> #Validator(90002,1)
-           90003 |-> #Validator(90003,1)
-           90004 |-> #Validator(90004,1)
-           90005 |-> #Validator(90005,1)
-           90006 |-> #Validator(90006,1)
+           90000 |-> #Validator(90000,1,(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
+           90001 |-> #Validator(90001,1,(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
+           90002 |-> #Validator(90002,1,(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
+           90003 |-> #Validator(90003,1,(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
+           90004 |-> #Validator(90004,1,(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
+           90005 |-> #Validator(90005,1,(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
+           90006 |-> #Validator(90006,1,(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
          </validators>
          <attested> 0 |-> .Attestations </attested>
          <justified> 0 |-> some 0 </justified>
