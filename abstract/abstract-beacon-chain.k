@@ -225,10 +225,10 @@ rule attestationsBalance(Target, A Attestations, Validators)
 rule attestationsBalance(_, .Attestations, _) => 0
 
 syntax Int ::= balanceOf(Attestation, Map) [function]
-rule balanceOf(A, A.attester |-> V:Validator _:Map) => V.balance
+rule balanceOf(A, A.attester |-> V:Validator _:Map) => V.effective_balance
 
 syntax Int ::= totalBalance(Map) [function]
-rule totalBalance(_ |-> V:Validator M:Map) => V.balance +Int totalBalance(M)
+rule totalBalance(_ |-> V:Validator M:Map) => V.effective_balance +Int totalBalance(M)
 rule totalBalance(.Map) => 0
 
 syntax KItem ::= justify(Int, Int)
