@@ -40,13 +40,13 @@ rule <k> init => . ... </k>
        <state>
          <slot> 0 </slot>
          <validators>
-           90000 |-> #Validator(90000,1,(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
-           90001 |-> #Validator(90001,1,(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
-           90002 |-> #Validator(90002,1,(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
-           90003 |-> #Validator(90003,1,(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
-           90004 |-> #Validator(90004,1,(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
-           90005 |-> #Validator(90005,1,(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
-           90006 |-> #Validator(90006,1,(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
+           90000 |-> #Validator(90000,(1,1),(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
+           90001 |-> #Validator(90001,(1,1),(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
+           90002 |-> #Validator(90002,(1,1),(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
+           90003 |-> #Validator(90003,(1,1),(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
+           90004 |-> #Validator(90004,(1,1),(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
+           90005 |-> #Validator(90005,(1,1),(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
+           90006 |-> #Validator(90006,(1,1),(0,0),(FAR_FUTURE_EPOCH,FAR_FUTURE_EPOCH))
          </validators>
          <attested> 0 |-> .Attestations </attested>
          <justified> 0 |-> some 0 </justified>
@@ -92,8 +92,9 @@ rule <k> processSlots(TargetSlot) => . ... </k>
 
 rule <k> processSlot() => . ... </k>
 
-rule <k> processBlock(#Block((Slot, ID), Parent, Attestations))
-      => processAttestations(Attestations) ... </k>
+rule <k> processBlock(#Block((Slot, ID), Parent, Attestations, Deposits))
+      => processAttestations(Attestations)
+      ~> processDeposits(Deposits) ... </k>
      <currentSlot> Slot </currentSlot>
      <state>
        <slot> Slot </slot>
@@ -136,6 +137,34 @@ rule <k> processAttestations(A Attestations => Attestations) ... </k>
       andBool epochOf(A.slot) ==Int A.target_epoch
       // TODO: check if A.attester is assigned to A.slot, and not slashed
 rule processAttestations(.Attestations) => .
+
+syntax KItem ::= processDeposits(Deposits)
+rule <k> processDeposits(D Deposits => Deposits) ... </k>
+     <currentSlot> Slot </currentSlot>
+     <state>
+       <slot> Slot </slot>
+       <validators>
+         D.sender |-> #Validator(_, (B => B +Int D.amount, _), _, _) // no change to effective_balance
+         ...
+       </validators>
+       ...
+     </state>
+rule <k> processDeposits(D Deposits => Deposits) ... </k>
+     <currentSlot> Slot </currentSlot>
+     <state>
+       <slot> Slot </slot>
+       <validators>
+         Validators => Validators[
+           D.sender <- #Validator(D.sender,
+                                  (D.amount, minInt(D.amount, MAX_EFFECTIVE_BALANCE)), // effective_balance cap
+                                  (FAR_FUTURE_EPOCH, FAR_FUTURE_EPOCH),
+                                  (FAR_FUTURE_EPOCH, FAR_FUTURE_EPOCH))
+         ]
+       </validators>
+       ...
+     </state>
+     requires notBool D.sender in keys(Validators)
+rule processDeposits(.Deposits) => .
 
 rule <k> processEpoch()
       => processJustification(epochOf(Slot) -Int 2)
