@@ -97,6 +97,7 @@ syntax Int ::= "MAX_ATTESTATION_INCLUSION_DELAY"        rule MAX_ATTESTATION_INC
 syntax Int ::= "FAR_FUTURE_EPOCH"                       rule FAR_FUTURE_EPOCH                    => 999999 /* 2^64 - 1 */ [macro]
 syntax Int ::= "MIN_DEPOSIT_AMOUNT"                     rule MIN_DEPOSIT_AMOUNT                  =>      1 /*     1 */    [macro]
 syntax Int ::= "MAX_EFFECTIVE_BALANCE"                  rule MAX_EFFECTIVE_BALANCE               =>      2 /*    32 */    [macro]
+syntax Int ::= "EJECTION_BALANCE"                       rule EJECTION_BALANCE                    =>      0 /*    16 */    [macro]
 syntax Int ::= "EFFECTIVE_BALANCE_INCREMENT"            rule EFFECTIVE_BALANCE_INCREMENT         =>      1 /*     1 */    [macro]
 syntax Int ::= "PERSISTENT_COMMITTEE_PERIOD"            rule PERSISTENT_COMMITTEE_PERIOD         =>      1 /*  2048 */    [macro]
 syntax Int ::= "ACTIVATION_EXIT_DELAY"                  rule ACTIVATION_EXIT_DELAY               =>      1 /*     4 */    [macro]

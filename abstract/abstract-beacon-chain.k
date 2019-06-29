@@ -5,6 +5,7 @@ module ABSTRACT-BEACON-CHAIN
 imports ABSTRACT-BEACON-CHAIN-SYNTAX
 imports INT
 imports MAP
+imports LIST
 
 configuration <T>
   <k> init ~> $PGM:Cmds </k>
@@ -253,7 +254,8 @@ rule <k> processEpoch()
       => processJustification(epochOf(Slot) -Int 2)
       ~> processJustification(epochOf(Slot) -Int 1)
       ~> processFinalization(epochOf(Slot) -Int 2)
-      ~> processFinalization(epochOf(Slot) -Int 1) ... </k>
+      ~> processFinalization(epochOf(Slot) -Int 1)
+      ~> processValidatorUpdates() ... </k>
      <currentSlot> Slot </currentSlot>
      <state>
        <slot> Slot </slot>
@@ -386,5 +388,116 @@ rule <k> true ~> finalize(Epoch, BlockID) => . ... </k>
        ...
      </state>
 rule <k> false ~> finalize(_, _) => . ... </k>
+
+// TODO: check if no mistake was made as this process is associated with the previous epoch
+syntax KItem ::= processValidatorUpdates()
+rule <k> processValidatorUpdates()
+      => processValidatorEjection(Validators)
+      ~> updateActivationEligibility(Validators)
+      ~> processValidatorActivation() ... </k>
+     <currentSlot> Slot </currentSlot>
+     <state>
+       <slot> Slot </slot>
+       <validators> Validators </validators>
+       ...
+     </state>
+
+syntax KItem ::= processValidatorEjection(Map)
+rule <k> processValidatorEjection(VID |-> _ M:Map)
+      => #if isActiveValidator(V, epochOf(Slot) -Int 1) andBool V.effective_balance <=Int EJECTION_BALANCE
+         #then initiateValidatorExit(V)
+         #else .
+         #fi
+      ~> processValidatorEjection(M) ... </k>
+     <currentSlot> Slot </currentSlot>
+     <state>
+       <slot> Slot </slot>
+       <validators> VID |-> V:Validator ... </validators>
+       ...
+     </state>
+rule processValidatorEjection(.Map) => .
+
+syntax KItem ::= updateActivationEligibility(Map)
+rule <k> updateActivationEligibility(VID |-> _ M:Map)
+      => updateActivationEligibility(M) ... </k>
+     <currentSlot> Slot </currentSlot>
+     <state>
+       <slot> Slot </slot>
+       <validators>
+         VID |-> (V:Validator => #if isActivationEligible(V)
+                                 #then V with activation_eligibility_epoch = epochOf(Slot) -Int 1
+                                 #else V
+                                 #fi)
+         ...
+       </validators>
+       ...
+     </state>
+rule updateActivationEligibility(.Map) => .
+
+syntax Bool ::= isActivationEligible(Validator) [function]
+rule isActivationEligible(V)
+  => V.activation_eligibility_epoch ==Int FAR_FUTURE_EPOCH andBool
+     V.effective_balance >=Int MAX_EFFECTIVE_BALANCE
+
+syntax Kitem ::= processValidatorActivation()
+rule <k> processValidatorActivation()
+      => activateValidators(activationQueueUptoChurnLimit(Validators, FinalizedEpoch, epochOf(Slot) -Int 1)) ... </k>
+     <currentSlot> Slot </currentSlot>
+     <state>
+       <slot> Slot </slot>
+       <validators> Validators </validators>
+       <lastFinalized> (FinalizedEpoch, _) </lastFinalized>
+       ...
+     </state>
+
+syntax KItem ::= activateValidators(List)
+rule <k> activateValidators(ListItem(V:Validator) Vs)
+      => activateValidators(                      Vs) ... </k>
+     <currentSlot> Slot </currentSlot>
+     <state>
+       <slot> Slot </slot>
+       <validators>
+         Validators[
+           V.id <- #if V.activation_epoch ==Int FAR_FUTURE_EPOCH
+                   #then V with activation_epoch = delayedActivationExitEpoch(epochOf(Slot) -Int 1)
+                   #else V
+                   #fi
+         ]
+       </validators>
+       ...
+     </state>
+rule activateValidators(.List) => .
+
+syntax List ::= activationQueueUptoChurnLimit(Map, Int, Int) [function]
+rule activationQueueUptoChurnLimit(Validators, FinalizedEpoch, CurrentEpoch)
+  => dropBeyondLimit(
+       activationQueue(Validators, FinalizedEpoch),
+       churnLimit(size(activeValidators(Validators, CurrentEpoch)))
+     )
+
+syntax List ::= activationQueue(Map, Int) [function]
+rule activationQueue(_ |-> V:Validator M:Map, FinalizedEpoch)
+  => #if V.activation_eligibility_epoch =/=Int FAR_FUTURE_EPOCH andBool
+         V.activation_epoch >=Int delayedActivationExitEpoch(FinalizedEpoch) // TODO: why is this needed?
+     #then ListItem(V) activationQueue(M, FinalizedEpoch)
+     #else             activationQueue(M, FinalizedEpoch)
+     #fi
+
+syntax List ::= dropBeyondLimit(List, Int) [function]
+rule dropBeyondLimit(Vs, Limit) => Vs requires size(Vs) <=Int Limit
+rule dropBeyondLimit(Vs, Limit)
+  => dropBeyondLimit(dropLastActivationEligibleValidator(Vs), Limit)
+     requires size(Vs) >Int Limit
+
+syntax List ::= dropLastActivationEligibleValidator(List)                     [function]
+              | dropLastActivationEligibleValidatorAux(List, Validator, List) [function]
+rule dropLastActivationEligibleValidator(ListItem(V:Validator) Vs)
+  => dropLastActivationEligibleValidatorAux(Vs, V, .List)
+rule dropLastActivationEligibleValidatorAux(ListItem(V:Validator) Vs, MaxV, AccVs)
+  => #if V.activation_eligibility_epoch >Int MaxV.activation_eligibility_epoch
+     #then dropLastActivationEligibleValidatorAux(Vs,    V, ListItem(MaxV) AccVs)
+     #else dropLastActivationEligibleValidatorAux(Vs, MaxV, ListItem(   V) AccVs)
+     #fi
+rule dropLastActivationEligibleValidatorAux(.List, _, Vs) => Vs
 
 endmodule
