@@ -92,9 +92,10 @@ rule <k> processSlots(TargetSlot) => . ... </k>
 
 rule <k> processSlot() => . ... </k>
 
-rule <k> processBlock(#Block((Slot, ID), Parent, Attestations, Deposits))
+rule <k> processBlock(#Block((Slot, ID), Parent, Attestations, Deposits, VoluntaryExits))
       => processAttestations(Attestations)
-      ~> processDeposits(Deposits) ... </k>
+      ~> processDeposits(Deposits) 
+      ~> processVoluntaryExits(VoluntaryExits) ... </k>
      <currentSlot> Slot </currentSlot>
      <state>
        <slot> Slot </slot>
@@ -144,7 +145,7 @@ rule <k> processDeposits(D Deposits => Deposits) ... </k>
      <state>
        <slot> Slot </slot>
        <validators>
-         D.sender |-> #Validator(_, (B => B +Int D.amount, _), _, _) // no change to effective_balance
+         D.sender |-> (V:Validator => V with balance = V.balance +Int D.amount) // no change to effective_balance
          ...
        </validators>
        ...
@@ -165,6 +166,88 @@ rule <k> processDeposits(D Deposits => Deposits) ... </k>
      </state>
      requires notBool D.sender in keys(Validators)
 rule processDeposits(.Deposits) => .
+
+syntax KItem ::= processVoluntaryExits(VoluntaryExits)
+rule <k> processVoluntaryExits(E Exits)
+      => initiateValidatorExit(V)
+      ~> processVoluntaryExits(  Exits) ... </k>
+     <currentSlot> Slot </currentSlot>
+     <state>
+       <slot> Slot </slot>
+       <validators> E.validator |-> V:Validator ... </validators>
+       ...
+     </state>
+     requires isActiveValidator(V, epochOf(Slot))
+      andBool V.exit_epoch ==Int FAR_FUTURE_EPOCH
+      andBool epochOf(Slot) >=Int E.epoch
+      andBool epochOf(Slot) >=Int V.activation_epoch +Int PERSISTENT_COMMITTEE_PERIOD
+rule processVoluntaryExits(.VoluntaryExits) => .
+
+syntax Bool ::= isActiveValidator(Validator, Int) [function]
+rule isActiveValidator(V, Epoch)
+  => V.activation_epoch <=Int Epoch andBool Epoch <Int V.exit_epoch
+
+syntax KItem ::= initiateValidatorExit(Validator)
+rule <k> initiateValidatorExit(V)
+      => setExitEpoch(V, computeExitEpoch(Validators, epochOf(Slot))) ... </k>
+     <currentSlot> Slot </currentSlot>
+     <state>
+       <slot> Slot </slot>
+       <validators> Validators </validators>
+       ...
+     </state>
+     requires V.exit_epoch =/=Int FAR_FUTURE_EPOCH
+
+syntax KItem ::= setExitEpoch(Validator, Int)
+rule <k> setExitEpoch(V, ExitEpoch) => . ... </k>
+     <currentSlot> Slot </currentSlot>
+     <state>
+       <slot> Slot </slot>
+       <validators>
+         V.id |-> (V => V with exit_epoch         = ExitEpoch
+                          with withdrawable_epoch = ExitEpoch +Int MIN_VALIDATOR_WITHDRAWABILITY_DELAY)
+         ...
+       </validators>
+       ...
+     </state>
+
+syntax Int ::= computeExitEpoch(Map, Int) [function]
+             | computeExitEpochAux(Map, Int, Int) [function]
+rule computeExitEpoch(Validators, CurrentEpoch)
+  => computeExitEpochAux(
+       Validators,
+       maxInt(maxExitEpoch(Validators), delayedActivationExitEpoch(CurrentEpoch)),
+       size(activeValidators(Validators, CurrentEpoch))
+     )
+rule computeExitEpochAux(Validators, ExitEpoch, ActiveValidatorSize)
+  => #if countValidatorsToExit(Validators, ExitEpoch) >=Int churnLimit(ActiveValidatorSize)
+     #then ExitEpoch +Int 1
+     #else ExitEpoch
+     #fi
+
+syntax Int ::= maxExitEpoch(Map) [function]
+rule maxExitEpoch(_ |-> V:Validator M:Map) => maxInt(V.exit_epoch, maxExitEpoch(M))
+rule maxExitEpoch(.Map) => 0
+
+syntax Int ::= countValidatorsToExit(Map, Int) [function]
+rule countValidatorsToExit(_ |-> V:Validator M:Map, ExitEpoch)
+  => #if V.exit_epoch ==Int ExitEpoch #then 1 #else 0 #fi +Int countValidatorsToExit(M, ExitEpoch)
+rule countValidatorsToExit(.Map, _) => 0
+
+syntax Map ::= activeValidators(Map, Int) [function]
+rule activeValidators(_ |-> V:Validator M:Map, Epoch)
+  => #if isActiveValidator(V, Epoch)
+     #then V.id |-> V activeValidators(M, Epoch)
+     #else            activeValidators(M, Epoch)
+     #fi
+rule activeValidators(.Map, _) => .Map
+
+syntax Int ::= delayedActivationExitEpoch(Int) [function]
+rule delayedActivationExitEpoch(Epoch) => Epoch +Int 1 +Int ACTIVATION_EXIT_DELAY
+
+syntax Int ::= churnLimit(Int) [function]
+rule churnLimit(ActiveValidatorSize)
+  => maxInt(MIN_PER_EPOCH_CHURN_LIMIT, ActiveValidatorSize /Int CHURN_LIMIT_QUOTIENT)
 
 rule <k> processEpoch()
       => processJustification(epochOf(Slot) -Int 2)
